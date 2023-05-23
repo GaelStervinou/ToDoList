@@ -53,4 +53,16 @@ class ItemTest extends TestCase
         );
         $item->isValidItem();
     }
+
+    public function testIsNotValidCreatedAt(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $item = new Item(
+            'test',
+            'test',
+            new \DateTime('tomorrow'),
+        );
+        $item->isValidItem();
+    }
 }

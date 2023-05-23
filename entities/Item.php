@@ -61,7 +61,7 @@ class Item
 
     public function isValidItem(): bool
     {
-        if ($this->getCreatedAt() === null || empty(trim($this->getName())) || empty(trim($this->getContent())) ||
+        if ($this->getCreatedAt() > new \DateTime('now') || empty(trim($this->getName())) || empty(trim($this->getContent())) ||
             strlen($this->getContent()) > 1000
         ){
             throw new RuntimeException('Invalid item');
