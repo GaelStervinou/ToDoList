@@ -6,11 +6,13 @@ use http\Exception\RuntimeException;
 class ToDoList
 {
     private int $idUser;
-    public int $id;
+    private int $id;
+    private array $items;
     function __construct(int $idUser, int $id)
     {
         $this->idUser = $idUser;
         $this->id = $id;
+
     }
 
     public function getIdUser(): int
@@ -33,7 +35,7 @@ class ToDoList
         $this->id = $id;
     }
 
-    public function addItem($item): void
+    public function addItem(Item $item): void
     {
         $totalItems = $this->totalItems();
 
@@ -41,7 +43,7 @@ class ToDoList
             //send email
         }
         if ($totalItems === 10){
-            throw new RuntimeException('To many items in this toDoList')
+            throw new RuntimeException('To many items in this toDoList');
         }
         $this->items[] = $item;
     }
