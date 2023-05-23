@@ -57,5 +57,13 @@ class ToDoList
     {
         return sizeof($this->items);
     }
-    
+
+    public function isValidToDoList(): bool
+    {
+        if (!isset($this->id) || !isset($this->id)
+        ){
+            throw new RuntimeException('Invalid toDoList');
+        }
+        return true;
+    }
 }
