@@ -1,6 +1,7 @@
 <?php
 
 namespace Entities;
+use InvalidArgumentException;
 use http\Exception\RuntimeException;
 
 class ToDoList
@@ -12,7 +13,7 @@ class ToDoList
     {
         $this->idUser = $idUser;
         $this->id = $id;
-
+        $this->items = [];
     }
 
     public function getIdUser(): int
@@ -45,7 +46,9 @@ class ToDoList
         if ($totalItems === 10){
             throw new RuntimeException('To many items in this toDoList');
         }
-        $this->items[] = $item;
+        if ($this->checkItemDateCreation($item)){
+            $this->items[] = $item;
+        }
     }
 
     public function getItems(): array
@@ -55,7 +58,7 @@ class ToDoList
 
     public function totalItems(): int
     {
-        return sizeof($this->getItems());
+        return count($this->getItems());
     }
 
     public function isValidToDoList(): bool
@@ -67,5 +70,22 @@ class ToDoList
         return true;
     }
 
+    public function checkItemDateCreation(Item $itemToAdd): bool
+    {
+        $lastItemCreatedAt = null;
+        foreach ($this->getItems() as $item){
+            if ($lastItemCreatedAt === null || $item->getCreatedAt() > $lastItemCreatedAt){
+                $lastItemCreatedAt = $item->getCreatedAt();
+            }
+        }
+        if ($lastItemCreatedAt === null){
+            return true;
+        }
+        $diff = $lastItemCreatedAt->diff($itemToAdd->getCreatedAt());
+        if ($diff->i < 30 ) {
+            throw new InvalidArgumentException('You can\'t add an item in less than 30 minutes');
+        }
 
+        return true;
+    }
 }
