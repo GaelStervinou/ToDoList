@@ -48,14 +48,14 @@ class ToDoList
         $this->items[] = $item;
     }
 
-    public function allItems(): array
+    public function getItems(): array
     {
         return $this->items;
     }
 
     public function totalItems(): int
     {
-        return sizeof($this->items);
+        return sizeof($this->getItems());
     }
 
     public function isValidToDoList(): bool
@@ -66,4 +66,6 @@ class ToDoList
         }
         return true;
     }
+
+
 }
