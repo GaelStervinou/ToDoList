@@ -8,15 +8,20 @@ use entities\PasswordValidator;
 
 class User
 {
+  private EmailValidator $emailValidator;
+  private PasswordValidator $passwordValidator;
+  
   public function __construct(
       private string $firstname,
       private string $name,
       private string $email,
       private string $password,
       private string $birthdate,
-      private EmailValidator $emailValidator
     )
-  {}
+  {
+    $this->emailValidator = new EmailValidator();
+    $this->passwordValidator = new PasswordValidator();
+  }
 
   public function isValid(): bool
   {
