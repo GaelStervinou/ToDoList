@@ -10,6 +10,7 @@ class ToDoList
     private int $id;
     private array $items;
     private EmailService $emailService;
+    private User $user;
 
     public function getEmailService(): EmailService
     {
@@ -20,12 +21,27 @@ class ToDoList
     {
         $this->emailService = $emailService;
     }
-    function __construct(int $idUser, int $id, EmailService $emailService)
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): void
+    {
+        if ($user->isValid() === false){
+            throw new InvalidArgumentException('This user is not valid');
+        }
+        $this->user = $user;
+    }
+
+    function __construct(int $idUser, int $id, EmailService $emailService, User $user)
     {
         $this->idUser = $idUser;
         $this->id = $id;
         $this->items = [];
         $this->emailService = $emailService;
+        $this->user = $user;
     }
 
     public function getIdUser(): int
@@ -50,11 +66,16 @@ class ToDoList
 
     public function addItem(Item $item): void
     {
+        if ($this->user->isValid() === false){
+            throw new InvalidArgumentException('This user is not valid');
+        }
+
         $totalItems = $this->totalItems();
 
         if ($totalItems === 10){
-            throw new RuntimeException('To many items in this toDoList');
+            throw new RuntimeException('Too many items in this toDoList');
         }
+
         if ($this->checkItemDateCreation($item) && $this->checkIfNameAlreadyExistsInItems($item->getName()) === false){
             $this->items[] = $item;
             if ($this->totalItems() === 8){
